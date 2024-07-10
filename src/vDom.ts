@@ -1,3 +1,5 @@
+export {}
+
 interface IVirtualNodeProps{
   [key: string]: string
 }

@@ -1,64 +1,55 @@
-export {}
-
 interface IVirtualNodeProps{
   [key: string]: string
 }
 
-interface IVirtualNode{
-  type: 'text' | 'element'
-}
-
-interface IVirtualText extends IVirtualNode{
-  type: 'text'
-  content: string
-}
-
-interface IVirtualElement extends IVirtualNode{
+interface IVirtualElement{
+  type: 'element'
   tag: string
-  content?: (IVirtualElement | IVirtualText)[]
+  content?: IVirtualElement[] | string[]
   props?: IVirtualNodeProps
 }
+type IVirtualNode = IVirtualElement
 
 const virtualDom: IVirtualElement = {
   type: 'element',
   tag: 'div',
-  content: [{
-    type: 'text',
-    content: 'text',
-  }]
+  props: {'id': '89'},
+  content: ['text']
 }
 
-const createVDomElement = (tag: string, props?: IVirtualNodeProps) => {
+const createVElement = (
+                        tag: string,
+                        props: IVirtualNodeProps = {},
+                        content:  IVirtualNode[] = []
+): IVirtualElement => {
+  return { tag, props, content, type: 'element' }
+}
+
+const createElementFromVNode = (vNode: IVirtualNode | string) => {
+  if(typeof vNode === 'string'){
+    return document.createTextNode(vNode)
+  }
+
+  const { tag, props, content } = vNode
+
   const element = document.createElement(tag)
 
   if(props) {
-    Object.keys(props ?? {}).forEach(key => {
+    Object.keys(props).forEach(key => {
       element.setAttribute(key, props[key])
     })
   }
 
+  if(content) content?.forEach(el => element.appendChild(createElementFromVNode(el)))
+
   return element
 }
 
-const createDomElementFromVirtual = (vNode: IVirtualNode): Node => {
-  if(vNode.type === 'element'){
-    const vElement = vNode as IVirtualElement
-    const element = createVDomElement(vElement.tag, vElement.props ?? {})
-
-    vElement.content?.forEach(childNode => {
-      element.appendChild(createDomElementFromVirtual(childNode))
-    })
-
-    return element
-  }
-  else if(vNode.type === 'text'){
-    const vText = vNode as IVirtualText
-
-    return document.createTextNode(vText.content)
-  }
-
-  throw new Error('Unknown virtual node type')
-}
-
-const dom = createDomElementFromVirtual(virtualDom)
+const dom = createElementFromVNode(virtualDom)
 document.body.appendChild(dom)
+
+const mount = (node: Node, target: HTMLElement) => {
+  target.replaceWith(node)
+  return node
+}
+console.log(virtualDom)

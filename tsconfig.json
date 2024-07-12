@@ -8,7 +8,7 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowSyntheticDefaultImports": true,

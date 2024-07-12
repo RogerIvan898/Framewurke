@@ -1,11 +1,11 @@
-import {VDom} from "./virtual-dom/virtual-dom.js";
+import {VDom} from "./virtual-dom/virtual-dom";
 
-const vNode = VDom.createVElement('div', {id: 'app'}, ['text'])
-const vNode1 = VDom.createVElement('span', {id: 'app'}, ['Text'])
+const vNode = VDom.createElement('div', {id: 'app'}, ['text'])
+const vNode1 = VDom.createElement('span', {id: 'app'}, ['Text'])
 
-const dom = VDom.createElementFromVNode(vNode) as HTMLElement
+const dom = VDom.createDomElement(vNode) as HTMLElement
 const target = document.getElementById('app')
 
 if(target) VDom.mount(dom, target)
 
-VDom.updateVNode(dom, vNode, vNode1)
+VDom.updateElement(dom, vNode, vNode1)

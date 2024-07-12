@@ -14,7 +14,7 @@ export namespace VDom{
       return document.createTextNode(vNode)
     }
 
-    const {tag, props = [], content = []} = vNode
+    const { tag, props = [], content = [] } = vNode
     const element = document.createElement(tag)
 
     for (const [key, value] of Object.entries(props)) {
@@ -33,7 +33,26 @@ export namespace VDom{
     return node
   }
 
-  export const upDateVNode = (container: Element, vNode: IVirtualNode, newNode: IVirtualNode) => {
+  export const updateProp = (node: Element, key: string, newValue: string) => {
+    if(newValue === null || newValue === undefined){
+      node.removeAttribute(key)
+      return
+    }
+
+    node.setAttribute(key, newValue)
+  }
+
+  export const updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
+    const mergedProps = {...props, ...newProps}
+
+    for (const key in Object.keys(mergedProps)){
+      if(newProps[key] !== props[key]){
+        updateProp(node, key, newProps[key])
+      }
+    }
+  }
+
+  export const updateVNode = (container: Element, vNode: IVirtualNode, newNode: IVirtualNode) => {
     if(typeof vNode === 'string' || typeof newNode === 'string'){
       if(vNode !== newNode){
         const nextNode = createElementFromVNode(newNode)
@@ -49,6 +68,8 @@ export namespace VDom{
       container.replaceWith(nextNode)
       return nextNode
     }
+
+    updateProps(container, vNode.props, newNode.props)
 
     return container
   }

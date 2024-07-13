@@ -50,7 +50,11 @@ export namespace VDOM_UPDATE_ELEMENT{
     return container
   }
 
-  function updateNestedElement(node: Element, vNestedElements: IVirtualElement[], newNestedElements: IVirtualElement[]){
+  function updateNestedElement(
+    node: Element,
+    vNestedElements: IVirtualElement[],
+    newNestedElements: IVirtualElement[]
+  ){
     node.childNodes.forEach((_, index) => {
       updateVNode(node, vNestedElements[index], newNestedElements[index])
     })
@@ -58,5 +62,6 @@ export namespace VDOM_UPDATE_ELEMENT{
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {
       node.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(vElement))
     })
+    
   }
 }

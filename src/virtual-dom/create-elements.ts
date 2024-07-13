@@ -8,7 +8,11 @@ export namespace VDOM_CREATE_ELEMENT{
     props: IVirtualNodeProps = {},
     content:  IVirtualNode[] = []
   ): IVirtualElement => {
-    return { tag, props, content }
+    return {
+      tag,
+      props,
+      content
+    }
   }
 
   export const createElementFromVNode = (vNode: IVirtualNode) => {

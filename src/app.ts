@@ -8,6 +8,7 @@ if(target) app = VDom.mount(VDom.createDomElement(vNode) as Element, target)
 
 const num = Math.floor(Math.random() * 10).toString()
 
-const vNode1 = VDom.createElement('span', {id: 'app'}, [num])
-app = VDom.updateElement(app as Element, vNode, vNode1)
-vNode = vNode1
+const newNode = VDom.createElement('span', {id: 'app'}, [num])
+app = VDom.updateElement(app as Element, vNode, newNode)
+
+vNode = newNode

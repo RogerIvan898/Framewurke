@@ -5,7 +5,7 @@ export namespace VDOM_UPDATE_ELEMENT{
   import IVirtualNode = VDom.IVirtualNode;
   import IVirtualElement = VDom.IVirtualElement;
 
-  export const updateProp = (node: Element, key: string, newValue: string) => {
+  export const updateProp = (node: Element, key: string, newValue?: string) => {
     if(newValue === null || newValue === undefined){
       node.removeAttribute(key)
       return

@@ -16,7 +16,7 @@ export namespace VDOM_CREATE_ELEMENT{
       return document.createTextNode(vNode)
     }
 
-    const { tag, props = [], content = [] } = vNode
+    const { tag, props = {}, content = [] } = vNode
     const element = document.createElement(tag)
 
     for (const [key, value] of Object.entries(props)) {

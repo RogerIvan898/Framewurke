@@ -4,6 +4,7 @@ import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 export namespace VDom {
   export const mount = (node: Element, target: HTMLElement) => {
     target.replaceWith(node)
+
     return node
   }
 

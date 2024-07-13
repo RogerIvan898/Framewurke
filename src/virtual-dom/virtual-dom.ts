@@ -1,10 +1,8 @@
-import {VDOM_CREATE_ELEMENT} from "./create-elements";
-import {VDOM_UPDATE_ELEMENT} from "./update-element";
+import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
+import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 
 export namespace VDom {
-
-
-  export const mount = (node: Node, target: HTMLElement) => {
+  export const mount = (node: Element, target: HTMLElement) => {
     target.replaceWith(node)
     return node
   }

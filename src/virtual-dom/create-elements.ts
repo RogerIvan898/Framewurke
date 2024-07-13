@@ -20,7 +20,7 @@ export namespace VDOM_CREATE_ELEMENT{
     const element = document.createElement(tag)
 
     for (const [key, value] of Object.entries(props)) {
-      element.setAttribute(key, value)
+      element.setAttribute(key, value as string)
     }
 
     for (const nestedElement of content) {

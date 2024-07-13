@@ -10,6 +10,7 @@ export namespace VDOM_UPDATE_ELEMENT{
       node.removeAttribute(key)
       return
     }
+
     node.setAttribute(key, newValue)
   }
 
@@ -28,19 +29,23 @@ export namespace VDOM_UPDATE_ELEMENT{
       if(vNode !== newNode){
         const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
         container.replaceWith(nextNode)
+
         return nextNode
       }
+
       return container
     }
 
     if(vNode.tag !== newNode.tag){
       const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
       container.replaceWith(nextNode)
+
       return nextNode
     }
 
     updateProps(container, vNode.props, newNode.props)
     updateNestedElement(container, vNode.content as IVirtualElement[], newNode.content as IVirtualElement[])
+
     return container
   }
 
@@ -48,6 +53,7 @@ export namespace VDOM_UPDATE_ELEMENT{
     node.childNodes.forEach((_, index) => {
       updateVNode(node, vNestedElements[index], newNestedElements[index])
     })
+
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {
       node.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(vElement))
     })

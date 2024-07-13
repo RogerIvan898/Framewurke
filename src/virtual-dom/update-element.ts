@@ -8,7 +8,7 @@ export namespace VDOM_UPDATE_ELEMENT{
   export const updateProp = (node: Element, key: string, newValue?: string) => {
     if(newValue === null || newValue === undefined){
       node.removeAttribute(key)
-      
+
       return
     }
 

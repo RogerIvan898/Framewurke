@@ -11,7 +11,7 @@ export namespace VDOM_CREATE_ELEMENT{
     return { tag, props, content }
   }
 
-  export const createElementFromVNode = (vNode: IVirtualNode | string) => {
+  export const createElementFromVNode = (vNode: IVirtualNode) => {
     if (typeof vNode === 'string') {
       return document.createTextNode(vNode)
     }

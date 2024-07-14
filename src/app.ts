@@ -1,18 +1,24 @@
+import type {IVirtualNode} from "./virtual-dom/virtual-dom.types";
 import {VDom} from "./virtual-dom/virtual-dom.js";
 
-const target = document.getElementById('app')
+const createApp = (vRootElement: IVirtualNode) => {
+  const target = document.getElementById('app')
 
-let app: Node | null = null
+  if(target){
+    return VDom.mount(VDom.createDomElement(vRootElement), target)
+  }
 
-let vNode = VDom.createElement('div', { id: '89' }, ['Text'])
-
-if(target) {
-  app = VDom.mount(VDom.createDomElement(vNode), target)
+  return null
 }
 
+let vRootElement = VDom.createElement('div', { id: 'app' }, [])
+
+let app = createApp(vRootElement)
+
 const num = Math.floor(Math.random() * 10).toString()
+const newVElement = VDom.createElement('span', {}, [num])
+const vNode = VDom.createElement('div', {}, ['Content: ', newVElement])
 
-const newNode = VDom.createElement('span', {id: 'app'}, [num])
-app = VDom.updateElement(app as Element, vNode, newNode)
-
-vNode = newNode
+if(app) {
+  app = VDom.updateElement(app, vRootElement, vNode)
+}

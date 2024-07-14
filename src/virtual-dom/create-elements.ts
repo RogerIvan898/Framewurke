@@ -1,6 +1,4 @@
-import IVirtualNodeProps = VDom.IVirtualNodeProps
-import IVirtualElement = VDom.IVirtualElement
-import IVirtualNode = VDom.IVirtualNode
+import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./virtual-dom.types";
 
 export namespace VDOM_CREATE_ELEMENT{
   export const createVElement = (
@@ -20,11 +18,11 @@ export namespace VDOM_CREATE_ELEMENT{
       return document.createTextNode(vNode)
     }
 
-    const { tag, props = {}, content = [] } = vNode
+    const { tag, props = {} as IVirtualNodeProps, content = [] } = vNode
     const element = document.createElement(tag)
 
     for (const [key, value] of Object.entries(props)) {
-      element.setAttribute(key, value as string)
+      element.setAttribute(key, value)
     }
 
     for (const nestedElement of content) {

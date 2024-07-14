@@ -1,8 +1,6 @@
-namespace VDom {
-  export interface IVirtualNodeProps {
+export interface IVirtualNodeProps {
     [key: string]: string
   }
-
   export interface IVirtualElement {
     tag: string
     content: IVirtualNode[]
@@ -10,4 +8,3 @@ namespace VDom {
   }
 
   export type IVirtualNode = IVirtualElement | string
-}

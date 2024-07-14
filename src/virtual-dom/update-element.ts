@@ -1,14 +1,11 @@
+/// <reference path="./create-elements.ts"/>
 import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
+import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./virtual-dom.types";
 
 export namespace VDOM_UPDATE_ELEMENT{
-  import IVirtualNodeProps = VDom.IVirtualNodeProps;
-  import IVirtualNode = VDom.IVirtualNode;
-  import IVirtualElement = VDom.IVirtualElement;
-
   export const updateProp = (node: Element, key: string, newValue?: string) => {
     if(newValue === null || newValue === undefined){
       node.removeAttribute(key)
-
       return
     }
 
@@ -25,7 +22,7 @@ export namespace VDOM_UPDATE_ELEMENT{
     }
   }
 
-  export const updateVNode = (container: Element, vNode: IVirtualNode, newNode: IVirtualNode) => {
+  export const updateVNode = (container: Element | Text, vNode: IVirtualNode, newNode: IVirtualNode) => {
     if(typeof vNode === 'string' || typeof newNode === 'string'){
       if(vNode !== newNode){
         const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
@@ -44,8 +41,10 @@ export namespace VDOM_UPDATE_ELEMENT{
       return nextNode
     }
 
-    updateProps(container, vNode.props, newNode.props)
-    updateNestedElement(container, vNode.content as IVirtualElement[], newNode.content as IVirtualElement[])
+    if(container instanceof Element) {
+      updateProps(container, vNode.props, newNode.props)
+      updateNestedElement(container, vNode.content as IVirtualElement[], newNode.content as IVirtualElement[])
+    }
 
     return container
   }
@@ -55,13 +54,12 @@ export namespace VDOM_UPDATE_ELEMENT{
     vNestedElements: IVirtualElement[],
     newNestedElements: IVirtualElement[]
   ){
-    node.childNodes.forEach((_, index) => {
-      updateVNode(node, vNestedElements[index], newNestedElements[index])
+    node.childNodes.forEach((element, index) => {
+      updateVNode(element as Element, vNestedElements[index], newNestedElements[index])
     })
 
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {
       node.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(vElement))
     })
-    
   }
 }

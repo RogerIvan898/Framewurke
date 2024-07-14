@@ -1,15 +1,17 @@
 /// <reference path="./create-elements.ts"/>
 import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
-import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./virtual-dom.types";
+import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./types";
 
 export namespace VDOM_UPDATE_ELEMENT{
-  export const updateProp = (node: Element, key: string, newValue?: string) => {
-    if(newValue === null || newValue === undefined){
-      node.removeAttribute(key)
-      return
-    }
+  export const updateProp = (node: Node, key: string, newValue?: string) => {
+    if(node instanceof Element) {
+      if (newValue === null || newValue === undefined) {
+        node.removeAttribute(key)
+        return
+      }
 
-    node.setAttribute(key, newValue)
+      node.setAttribute(key, newValue)
+    }
   }
 
   export const updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
@@ -22,11 +24,11 @@ export namespace VDOM_UPDATE_ELEMENT{
     }
   }
 
-  export const updateVNode = (container: Element | Text, vNode: IVirtualNode, newNode: IVirtualNode) => {
-    if(typeof vNode === 'string' || typeof newNode === 'string'){
+  export const updateVNode = (container: Node, vNode: IVirtualNode, newNode: IVirtualNode) => {
+    if((typeof vNode === 'string' || typeof newNode === 'string') || container instanceof Text){
       if(vNode !== newNode){
-        const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
-        container.replaceWith(nextNode)
+        const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+        (container as Element).replaceWith(nextNode)
 
         return nextNode
       }
@@ -35,8 +37,8 @@ export namespace VDOM_UPDATE_ELEMENT{
     }
 
     if(vNode.tag !== newNode.tag){
-      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
-      container.replaceWith(nextNode)
+      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+      (container as Element).replaceWith(nextNode)
 
       return nextNode
     }
@@ -50,7 +52,7 @@ export namespace VDOM_UPDATE_ELEMENT{
   }
 
   function updateNestedElement(
-    node: Element,
+    node: Node,
     vNestedElements: IVirtualElement[],
     newNestedElements: IVirtualElement[]
   ){
@@ -61,5 +63,6 @@ export namespace VDOM_UPDATE_ELEMENT{
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {
       node.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(vElement))
     })
+
   }
 }

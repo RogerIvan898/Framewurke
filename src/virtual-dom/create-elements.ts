@@ -1,4 +1,4 @@
-import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./virtual-dom.types";
+import {IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./types";
 
 export namespace VDOM_CREATE_ELEMENT{
   export const createVElement = (

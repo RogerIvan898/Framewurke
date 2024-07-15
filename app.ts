@@ -7,7 +7,7 @@ let app = Framewurke.createApp(vRootElement)
 
 const vNode = VDom.createElement('div', {}, [
   'Content: ',
-  VDom.createElement('span', {}, [Math.floor(Math.random() * 10).toString()],)
+  VDom.createElement('span', [Math.floor(Math.random() * 10).toString()],)
 ])
 
 if(app) {

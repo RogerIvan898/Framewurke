@@ -1,8 +1,8 @@
 import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
 import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 
-export class VDom {
-  static mount(node: Element | Text, target: HTMLElement) {
+export class VDom{
+  static mount(node: Node, target: HTMLElement) {
     target.replaceWith(node)
     return node
   }

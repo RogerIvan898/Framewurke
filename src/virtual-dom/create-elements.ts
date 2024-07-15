@@ -1,28 +1,35 @@
 import {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
 
+type CreateVirtualElementProps = (IVirtualNode | string)[]
+
 export class VDOM_CREATE_ELEMENT {
   static createVElement(text: string): IVirtualText
-  static createVElement(tag: string, content: IVirtualNode[]): IVirtualElement
-  static createVElement(tag: string, props: IVirtualNodeProps, content?: (IVirtualNode | string)[]): IVirtualElement
+  static createVElement(tag: string, content: CreateVirtualElementProps): IVirtualElement
+  static createVElement(tag: string, props: IVirtualNodeProps, content?: CreateVirtualElementProps): IVirtualElement
 
   static createVElement (
     arg1: string,
-    arg2?: IVirtualNodeProps | IVirtualNode[],
-    arg3?: (IVirtualNode | string)[]
+    arg2?: IVirtualNodeProps | CreateVirtualElementProps,
+    arg3?: CreateVirtualElementProps
   ) {
     if(arg2 === undefined && arg3 === undefined){
-      return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
+      return this.createVirtualTextNode(arg1)
     }
 
     if(Array.isArray(arg2) && arg3 === undefined) {
-      return VDOM_CREATE_ELEMENT.createVirtualElement(arg1,{}, arg2)
+      const nestedElements = 2 ? this.createVirtualNestedElements(arg2) : []
+      return this.createVirtualElement(arg1, {}, nestedElements)
     }
 
-    const nestedElements = arg3?.map(node =>
+    const nestedElements = arg3 ? this.createVirtualNestedElements(arg3) : []
+
+    return this.createVirtualElement(arg1, arg2 as IVirtualNodeProps, nestedElements)
+  }
+
+  private static createVirtualNestedElements(nestedElements: CreateVirtualElementProps){
+    return nestedElements.map(node =>
       typeof node === 'string' ? VDOM_CREATE_ELEMENT.createVirtualTextNode(node) : node
     ) ?? []
-
-    return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, arg2 as IVirtualNodeProps, nestedElements)
   }
 
   static createVirtualElement(tag: string, props: IVirtualNodeProps, content: IVirtualNode[]): IVirtualElement {
@@ -39,6 +46,7 @@ export class VDOM_CREATE_ELEMENT {
     }
 
     const { tag, props = {} as IVirtualNodeProps, content = [] } = <IVirtualElement>vNode
+
     const element = document.createElement(tag)
 
     for (const [key, value] of Object.entries(props)) {

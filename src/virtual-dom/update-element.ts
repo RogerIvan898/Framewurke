@@ -13,9 +13,9 @@ export class VDOM_UPDATE_ELEMENT{
   }
 
   private static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
-    const mergedProps = {...props, ...newProps}
+    const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
 
-    for (const key in mergedProps){
+    for (const key of propsKeys){
       if(newProps[key] !== props[key]){
         this.updateProp(node, key, newProps[key])
       }
@@ -44,14 +44,14 @@ export class VDOM_UPDATE_ELEMENT{
     }
 
     this.updateProps(container as Element, vElement.props, newElement.props)
-    this.updateNestedElement(container, vElement.content as IVirtualElement[], newElement.content as IVirtualElement[])
+    this.updateNestedElement(container, vElement.content, newElement.content)
 
     return container
   }
   private static updateNestedElement(
     node: Node,
-    vNestedElements: IVirtualElement[],
-    newNestedElements: IVirtualElement[]
+    vNestedElements: IVirtualNode[],
+    newNestedElements: IVirtualNode[]
   ){
     node.childNodes.forEach((element, index) => {
       this.updateVNode(element as Element, vNestedElements[index], newNestedElements[index])

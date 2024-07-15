@@ -1,21 +1,14 @@
-import type {IVirtualNode} from "./src/virtual-dom/types";
 import {VDom} from "./src/virtual-dom";
+import {Framewurke} from "./src/Framewurke";
 
-const createApp = (vRootElement: IVirtualNode) => {
-  const target = document.getElementById('app')
-  if(target){
-    return VDom.mount(VDom.createDomElement(vRootElement), target) as Node
-  }
+const vRootElement = VDom.createElement('div', { id: 'app' })
 
-  return null
-}
+let app = Framewurke.createApp(vRootElement)
 
-let vRootElement = VDom.createElement('div', { id: 'app' }, [])
-let app = createApp(vRootElement)
-
-const num = Math.floor(Math.random() * 10).toString()
-const newVElement = VDom.createElement('span', {}, [num])
-const vNode = VDom.createElement('div', {}, ['Content: ', newVElement])
+const vNode = VDom.createElement('div', {}, [
+  'Content: ',
+  VDom.createElement('span', {}, [Math.floor(Math.random() * 10).toString()],)
+])
 
 if(app) {
   app = VDom.updateElement(app, vRootElement, vNode)

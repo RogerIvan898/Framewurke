@@ -2,10 +2,18 @@ export interface IVirtualNodeProps {
   [key: string]: string
 }
 
-export interface IVirtualElement {
+export interface IVirtualNode {
+  type: 'element' | 'text'
+}
+
+export interface IVirtualElement extends IVirtualNode{
+  type: 'element'
   tag: string
   content: IVirtualNode[]
   props: IVirtualNodeProps
 }
 
-export type IVirtualNode = IVirtualElement | string
+export interface IVirtualText extends IVirtualNode{
+  type: 'text'
+  content: string
+}

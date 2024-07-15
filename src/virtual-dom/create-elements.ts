@@ -13,17 +13,17 @@ export class VDOM_CREATE_ELEMENT {
     arg3?: CreateVirtualElementProps
   ) {
     if(arg2 === undefined && arg3 === undefined){
-      return this.createVirtualTextNode(arg1)
+      return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
     }
 
     if(Array.isArray(arg2) && arg3 === undefined) {
-      const nestedElements = 2 ? this.createVirtualNestedElements(arg2) : []
-      return this.createVirtualElement(arg1, {}, nestedElements)
+      const nestedElements = 2 ? VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg2) : []
+      return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, {}, nestedElements)
     }
 
-    const nestedElements = arg3 ? this.createVirtualNestedElements(arg3) : []
+    const nestedElements = arg3 ? VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg3) : []
 
-    return this.createVirtualElement(arg1, arg2 as IVirtualNodeProps, nestedElements)
+    return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, arg2 as IVirtualNodeProps, nestedElements)
   }
 
   private static createVirtualNestedElements(nestedElements: CreateVirtualElementProps){

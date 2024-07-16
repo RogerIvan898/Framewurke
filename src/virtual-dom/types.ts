@@ -1,6 +1,8 @@
 export interface IVirtualNodeProps {
-  [key: string]: string
+  [key: string]: string | Function
 }
+
+export type CustomElement = Element & IVirtualNodeProps
 
 export interface IVirtualNode {
   type: 'element' | 'text'

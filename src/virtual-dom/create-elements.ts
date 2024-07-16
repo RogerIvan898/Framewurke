@@ -1,4 +1,5 @@
 import {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
+import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
@@ -49,9 +50,8 @@ export class VDOM_CREATE_ELEMENT {
 
     const element = document.createElement(tag)
 
-    for (const [key, value] of Object.entries(props)) {
-      element.setAttribute(key, value)
-    }
+    VDOM_UPDATE_ELEMENT.updateProps(element, {}, props)
+
 
     for (const nestedElement of content) {
       element.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(nestedElement))

@@ -11,7 +11,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tsc": "^2.0.4",
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.24.9",
+    "@babel/plugin-transform-react-jsx": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
     "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.24.7",
+    "@babel/preset-env": "^7.24.8"
   }
 }

@@ -6,15 +6,19 @@ type CreateVirtualElementProps = (IVirtualNode | string)[]
 export class VDOM_CREATE_ELEMENT {
   static createVElement(text: string): IVirtualText
   static createVElement(tag: string, content: CreateVirtualElementProps): IVirtualElement
-  static createVElement(tag: string, props: IVirtualNodeProps, content?: CreateVirtualElementProps): IVirtualElement
+  static createVElement(tag: string, props: IVirtualNodeProps, ...content: CreateVirtualElementProps): IVirtualElement
 
   static createVElement (
     arg1: string,
     arg2?: IVirtualNodeProps | CreateVirtualElementProps,
-    arg3?: CreateVirtualElementProps
+    ...arg3: CreateVirtualElementProps
   ) {
+
     if(arg2 === undefined && arg3 === undefined){
       return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
+    }
+    if(arg2 === null){
+      arg2 = {}
     }
 
     if(Array.isArray(arg2) && arg3 === undefined) {
@@ -22,9 +26,9 @@ export class VDOM_CREATE_ELEMENT {
       return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, {}, nestedElements)
     }
 
-    const nestedElements = arg3 ? VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg3) : []
+    const _nestedElements = arg3 ? VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg3) : []
 
-    return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, arg2 as IVirtualNodeProps, nestedElements)
+    return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, arg2 as IVirtualNodeProps, _nestedElements)
   }
 
   private static createVirtualNestedElements(nestedElements: CreateVirtualElementProps){
@@ -34,7 +38,7 @@ export class VDOM_CREATE_ELEMENT {
   }
 
   static createVirtualElement(tag: string, props: IVirtualNodeProps, content: IVirtualNode[]): IVirtualElement {
-    return { type: 'element', tag, props, content }
+    return { type: 'element', tag, props, content: content }
   }
 
   static createVirtualTextNode(text: string): IVirtualText{

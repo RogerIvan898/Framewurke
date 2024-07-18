@@ -3,7 +3,7 @@ import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
-export class VDOM_CREATE_ELEMENT {
+export default class VDOM_CREATE_ELEMENT {
   static createVElement(text: string): IVirtualText
   static createVElement(tag: string, content: CreateVirtualElementProps): IVirtualElement
   static createVElement(tag: string, props: IVirtualNodeProps, ...content: CreateVirtualElementProps): IVirtualElement

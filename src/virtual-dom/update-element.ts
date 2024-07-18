@@ -1,4 +1,4 @@
-import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
+import VDOM_CREATE_ELEMENT from "./create-elements.js";
 import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./types";
 import {createListener} from "./event-listeners.js";
 

@@ -1,4 +1,4 @@
-import {VDOM_CREATE_ELEMENT} from "./create-elements.js";
+import VDOM_CREATE_ELEMENT from "./create-elements.js";
 import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
 
 export class VDom{

@@ -1,5 +1,5 @@
 import {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
-import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
+import VDOM_UPDATE_ELEMENT from "./update-element.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 

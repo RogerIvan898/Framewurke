@@ -16,7 +16,10 @@ module.exports = function (api) {
     ["@babel/plugin-transform-react-jsx", { "pragma": "VDOM_CREATE_ELEMENT.createVElement" }],
     ['babel-plugin-auto-import', {
       declarations: [
-        { default: 'VDOM_CREATE_ELEMENT', path: './src/virtual-dom/create-elements.js' },
+        {
+          default: 'VDOM_CREATE_ELEMENT',
+          path: './src/virtual-dom/create-elements.js'
+        },
       ],
     }]
   ]
@@ -24,5 +27,5 @@ module.exports = function (api) {
   return {
     presets,
     plugins
-  };
-};
+  }
+}

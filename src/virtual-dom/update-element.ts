@@ -2,7 +2,7 @@ import VDOM_CREATE_ELEMENT from "./create-elements.js";
 import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./types";
 import {createListener} from "./event-listeners.js";
 
-export class VDOM_UPDATE_ELEMENT{
+export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (node: Node, key: string, newValue?: string | Function) => {
     const element = node as CustomElement
     if(key.startsWith('on')){

@@ -1,5 +1,5 @@
 import VDOM_CREATE_ELEMENT from "./create-elements.js";
-import {VDOM_UPDATE_ELEMENT} from "./update-element.js";
+import VDOM_UPDATE_ELEMENT from "./update-element.js";
 
 export class VDom{
   static mount(node: Node, target: HTMLElement) {

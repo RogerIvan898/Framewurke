@@ -8,7 +8,7 @@ declare namespace JSX{
 
 interface IHtmlElementAttributes extends IHtmlElementListeners{
   accessKey?: string
-  autocapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'
+  autoCapitalize?: 'off' | 'none' | 'on' | 'sentences' | 'words' | 'characters'
   class?: string
   contentEditable?: boolean | 'inherit'
   dir?: 'rtl' | 'ltr' | 'auto'
@@ -34,6 +34,10 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   resource?: string
   typeof?: string
   vocab?: string
+
+  itemProp?: string
+  itemScope?: string
+  itemType?: string
 }
 
 interface IHtmlElementListeners{

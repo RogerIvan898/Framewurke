@@ -13,12 +13,12 @@ module.exports = function (api) {
 
   const plugins = [
     "@babel/plugin-syntax-jsx",
-    ["@babel/plugin-transform-react-jsx", { "pragma": "VDOM_CREATE_ELEMENT.createVElement" }],
+    ["@babel/plugin-transform-react-jsx", { "pragma": "VDOM.createElement" }],
     ['babel-plugin-auto-import', {
       declarations: [
         {
-          default: 'VDOM_CREATE_ELEMENT',
-          path: './src/virtual-dom/create-elements.js'
+          default: 'VDOM',
+          path: './src/virtual-dom'
         },
       ],
     }]

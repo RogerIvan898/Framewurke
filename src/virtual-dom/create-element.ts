@@ -1,19 +1,20 @@
-import {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
+import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
 export default class VDOM_CREATE_ELEMENT {
-  static createVElement(text: string): IVirtualText
-  static createVElement(tag: string, content: CreateVirtualElementProps): IVirtualElement
-  static createVElement(tag: string, props: IVirtualNodeProps, ...content: CreateVirtualElementProps): IVirtualElement
+  static createVirtualNode(text: string): IVirtualText
+  static createVirtualNode(tag: string, content: CreateVirtualElementProps): IVirtualElement
+  static createVirtualNode(
+    tag: string, props: IVirtualNodeProps, ...content: CreateVirtualElementProps
+  ): IVirtualElement
 
-  static createVElement (
+  static createVirtualNode (
     arg1: string,
     arg2?: IVirtualNodeProps | CreateVirtualElementProps,
     ...arg3: CreateVirtualElementProps
   ) {
-
     if(arg2 === undefined && arg3 === undefined){
       return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
     }

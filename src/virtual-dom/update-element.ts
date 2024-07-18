@@ -1,16 +1,20 @@
-import VDOM_CREATE_ELEMENT from "./create-elements.js";
-import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps} from "./types";
+import VDOM_CREATE_ELEMENT from "./create-element.js";
+import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
 
 export default class VDOM_UPDATE_ELEMENT{
-  private static updateProp = (node: Node, key: string, newValue?: string | Function) => {
+  private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
     const element = node as CustomElement
+
     if(key.startsWith('on')){
       const eventName = key.slice(2).toLowerCase()
       if(newValue) element[eventName] = newValue
 
-      if(!newValue) node.removeEventListener(eventName, createListener)
-      else node.addEventListener(eventName, createListener)
+      if(!newValue){
+        node.removeEventListener(eventName, createListener)
+      } else {
+        node.addEventListener(eventName, createListener)
+      }
 
       return
     }
@@ -20,8 +24,7 @@ export default class VDOM_UPDATE_ELEMENT{
         node.removeAttribute(key)
         return
       }
-      if(typeof newValue === 'string') node.setAttribute(key, newValue)
-      if(newValue instanceof Function) (node as CustomElement)[key] = newValue
+      (node as CustomElement)[key] = newValue
     }
   }
 
@@ -29,7 +32,11 @@ export default class VDOM_UPDATE_ELEMENT{
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
     for (const key of propsKeys){
       if(newProps[key] !== props[key]){
-        VDOM_UPDATE_ELEMENT.updateProp(node, key, newProps[key])
+        if(key === 'class'){
+          VDOM_UPDATE_ELEMENT.updateProp(node, 'className', newProps[key])
+        } else {
+          VDOM_UPDATE_ELEMENT.updateProp(node, key, newProps[key])
+        }
       }
     }
   }
@@ -45,10 +52,8 @@ export default class VDOM_UPDATE_ELEMENT{
       return container
     }
 
-
     const vElement = vNode as IVirtualElement
     const newElement = newNode as IVirtualElement
-    console.log('prevElement:', vElement.content.length, ' newElement', newNode)
 
     if (vElement.tag !== newElement.tag) {
       const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
@@ -57,12 +62,12 @@ export default class VDOM_UPDATE_ELEMENT{
       return nextNode
     }
 
-
     this.updateProps(container as Element, vElement.props, newElement.props)
     this.updateNestedElement(container, vElement.content, newElement.content)
 
     return container
   }
+
   private static updateNestedElement(
     node: Node,
     vNestedElements: IVirtualNode[],
@@ -75,6 +80,5 @@ export default class VDOM_UPDATE_ELEMENT{
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {
       node.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(vElement))
     })
-
   }
 }

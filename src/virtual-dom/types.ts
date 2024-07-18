@@ -1,5 +1,7 @@
+export type VirtualNodePropsValue = string | Function | number
+
 export interface IVirtualNodeProps {
-  [key: string]: string | Function
+  [key: string]: VirtualNodePropsValue
 }
 
 export type CustomElement = Element & IVirtualNodeProps

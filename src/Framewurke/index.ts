@@ -1,5 +1,5 @@
-import {IVirtualNode} from "../virtual-dom/types";
-import {VDom} from "../virtual-dom";
+import type {IVirtualNode} from "../virtual-dom/types";
+import VDom from "../virtual-dom";
 
 export class Framewurke{
   public static createApp(vRootNode: IVirtualNode, rootNode?: HTMLElement){

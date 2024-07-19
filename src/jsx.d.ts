@@ -22,9 +22,7 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   tabIndex?: string
   title?: string
   translate?: 'yes' | 'no'
-
   role?: string
-
   //RDFa Attributes
   about?: string
   datatype?: string
@@ -38,8 +36,70 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   itemProp?: string
   itemScope?: string
   itemType?: string
+  itemID?: string
+  itemRef?: string
 }
 
 interface IHtmlElementListeners{
-  onClick: Function
+  onSubmit?: Function
+  onInvalid?: Function
+  onLoad?: Function
+  onError?: Function
+  onKeyDown?: Function
+  onKeyPress?: Function
+  onKeyUp?: Function
+  onAbort?: Function
+  onCapPlay?: Function
+  onCopy?: Function
+  onCut?: Function
+  onClick?: Function
+  onPaste?: Function
+  onFocus?: Function
+  onBlur?: Function
+  onChange?: Function
+  onInput?: Function
+  onReset?: Function
+  onCanPlayThrough?: Function
+  onDurationChange?: Function
+  onEmptied?: Function
+  onEnded?: Function
+  onLoadedData?: Function
+  onLoadedMetaData?: Function
+  onLoadStart?: Function
+  onPause?: Function
+  onPlay?: Function
+  onPlaying?: Function
+  onProgress?: Function
+  onSeeked?: Function
+  onSeeking?: Function
+  onStalled?: Function
+  onSuspend?: Function
+  onTimeUpdate?: Function
+  onVolumeChange?: Function
+  onWaiting?: Function
+  onAuxClick?: Function
+  onContextMenu?: Function
+  onDoubleClick?: Function
+  onDrag?: Function
+  onDragEnd?: Function
+  onDragEnter?: Function
+  onDragExit?: Function
+  onDragLeave?: Function
+  onDragOver?: Function
+  onDragStart?: Function
+  onDrop?: Function
+  onMouseDown?: Function
+  onMouseEnter?: Function
+  onMouseLeave?: Function
+  onMouseMove?: Function
+  onMouseCapture?: Function
+  onMouseOut?: Function
+  onMouseOver?: Function
+  onMouseUp?: Function
+  onSelect?: Function
+  onEncrypted?: Function
+  onPointerDown?: Function
+  onPointerMove?: Function
+  onPointerUp?: Function
+  onPinterCancel?: Function
 }

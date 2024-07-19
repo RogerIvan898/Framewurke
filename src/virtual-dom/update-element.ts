@@ -31,11 +31,14 @@ export default class VDOM_UPDATE_ELEMENT{
   static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
     for (const key of propsKeys){
-      if(newProps[key] !== props[key]){
+      const prevValue = props[key]
+      const newValue = newProps[key]
+      
+      if(prevValue !== newValue){
         if(key === 'class'){
-          VDOM_UPDATE_ELEMENT.updateProp(node, 'className', newProps[key])
+          VDOM_UPDATE_ELEMENT.updateProp(node, 'className', newValue)
         } else {
-          VDOM_UPDATE_ELEMENT.updateProp(node, key, newProps[key])
+          VDOM_UPDATE_ELEMENT.updateProp(node, key, newValue)
         }
       }
     }

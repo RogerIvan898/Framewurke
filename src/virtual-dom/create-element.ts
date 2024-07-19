@@ -33,7 +33,7 @@ export default class VDOM_CREATE_ELEMENT {
   }
 
   private static createVirtualNestedElements(nestedElements: CreateVirtualElementProps){
-    return nestedElements.map(node =>
+    return nestedElements?.map(node =>
       typeof node === 'string' ? VDOM_CREATE_ELEMENT.createVirtualTextNode(node) : node
     ) ?? []
   }

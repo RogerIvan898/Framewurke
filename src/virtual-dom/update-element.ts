@@ -24,6 +24,7 @@ export default class VDOM_UPDATE_ELEMENT{
         node.removeAttribute(key)
         return
       }
+
       (node as CustomElement)[key] = newValue
     }
   }
@@ -33,7 +34,7 @@ export default class VDOM_UPDATE_ELEMENT{
     for (const key of propsKeys){
       const prevValue = props[key]
       const newValue = newProps[key]
-      
+
       if(prevValue !== newValue){
         if(key === 'class'){
           VDOM_UPDATE_ELEMENT.updateProp(node, 'className', newValue)
@@ -49,6 +50,7 @@ export default class VDOM_UPDATE_ELEMENT{
       if(vNode !== newNode){
         const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
         (container as Element).replaceWith(nextNode)
+
         return nextNode
       }
 
@@ -77,7 +79,11 @@ export default class VDOM_UPDATE_ELEMENT{
     newNestedElements: IVirtualNode[]
   ){
     node.childNodes.forEach((element, index) => {
-      this.updateVNode(element as Element, vNestedElements[index], newNestedElements[index])
+      if (index < newNestedElements.length) {
+        this.updateVNode(element, vNestedElements[index], newNestedElements[index])
+      } else {
+        node.removeChild(element)
+      }
     })
 
     newNestedElements.splice(vNestedElements.length).forEach(vElement => {

@@ -1,10 +1,10 @@
 import VDOM_CREATE_ELEMENT from "./create-element.js";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
-import {IVirtualNode} from "./types";
 
 export default class VDom{
   static mount(node: Node, target: HTMLElement) {
     target.replaceWith(node)
+    
     return node
   }
 
@@ -16,7 +16,7 @@ export default class VDom{
    * @return {HTMLElement | Text} - The updated DOM element or text node
    */
   static updateElement = VDOM_UPDATE_ELEMENT.updateVNode
-  
+
   static createDomElement = VDOM_CREATE_ELEMENT.createElementFromVNode
   static createElement = VDOM_CREATE_ELEMENT.createVirtualNode
 }

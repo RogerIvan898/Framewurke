@@ -2,13 +2,16 @@ import {Framewurke} from "./src/Framewurke";
 import {IVirtualNode} from "./src/virtual-dom/types";
 import VDom from "./src/virtual-dom";
 
-const vNode = () => {
+export const vNode = () => {
   return <div>Text</div>
 }
 
+VDom.createElement
+
 const vNode1 = () => {
   return (
-    <span class={'89'} contentEditable={true}>
+    <span class={'89'}>
+      <vNode/>
       <div>89</div>
     </span>
   )

@@ -6,8 +6,6 @@ export const vNode = () => {
   return <div>Text</div>
 }
 
-VDom.createElement
-
 const vNode1 = () => {
   return (
     <span class={'89'}>

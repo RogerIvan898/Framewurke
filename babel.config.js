@@ -8,14 +8,11 @@ module.exports = function (api) {
       },
       modules: false
     }],
+    "@babel/preset-react"
   ]
 
   const plugins = [
-    "@babel/plugin-syntax-jsx",
-    ["@babel/plugin-transform-react-jsx", {
-      pragma: "VDOM.createElement",
-      pragmaFrag: "VDOM.createElement",
-    }],
+    "./babel-plugin-jsx-to-js.js",
     ['babel-plugin-auto-import', {
       declarations: [
         {

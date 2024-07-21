@@ -4,7 +4,7 @@ import VDOM_UPDATE_ELEMENT from "./update-element.js";
 export default class VDom{
   static mount(node: Node, target: HTMLElement) {
     target.replaceWith(node)
-    
+
     return node
   }
 

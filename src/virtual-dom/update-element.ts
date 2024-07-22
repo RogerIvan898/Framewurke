@@ -6,31 +6,36 @@ export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
     const element = node as CustomElement
 
-    if(key.startsWith('on')){
-      const eventName = key.slice(2).toLowerCase()
-      if(newValue) element[eventName] = newValue
-
-      if(!newValue){
-        node.removeEventListener(eventName, createListener)
-      } else {
-        node.addEventListener(eventName, createListener)
-      }
-
+    if(key.startsWith('on') && newValue instanceof Function){
+      VDOM_UPDATE_ELEMENT.updateEventProp(element, key, newValue)
       return
     }
 
-    if(node instanceof Element) {
-      if (newValue === undefined) {
-        node.removeAttribute(key)
-        return
-      }
+    VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue as Exclude<VirtualNodePropsValue, Function>)
+  }
 
-      (node as CustomElement)[key] = newValue
+  private static updateEventProp(element: CustomElement, key: string, newValue?: Function){
+    const eventName = key.slice(2).toLowerCase()
+
+    if(newValue){
+      element[eventName] = newValue
+      element.addEventListener(eventName, createListener)
+    } else {
+      element.removeEventListener(eventName, createListener)
     }
+  }
+
+  private static updateAttributeProp(element: CustomElement, key: string, newValue?: string | number){
+    if(newValue === null || newValue === undefined){
+      delete element[key]
+      return
+    }
+    element[key] = newValue
   }
 
   static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
+
     for (const key of propsKeys){
       const prevValue = props[key]
       const newValue = newProps[key]

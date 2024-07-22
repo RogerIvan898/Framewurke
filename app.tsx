@@ -1,21 +1,25 @@
 import {Framewurke} from "./src/Framewurke";
-import {IVirtualNode} from "./src/virtual-dom/types";
+import type {IVirtualNode} from "./src/virtual-dom/types";
 import VDom from "./src/virtual-dom";
 
-export const vNode = () => {
-  return <div>Text</div>
+interface IProps {
+  id: number
+}
+
+export const vNode = ({id}: IProps) => {
+  return <div id={id}>Text</div>
 }
 
 const vNode1 = () => {
   return (
     <span class={'89'}>
-      <vNode/>
+      <vNode id={89}/>
       <div>89</div>
     </span>
   )
 }
 
-const node = vNode()
+const node = vNode({id: 89})
 
 let app = Framewurke.createApp(node as IVirtualNode)
 

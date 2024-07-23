@@ -38,6 +38,8 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   itemType?: string
   itemID?: string
   itemRef?: string
+
+  FOR: Array<any>
 }
 
 interface IHtmlElementListeners{

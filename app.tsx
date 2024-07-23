@@ -6,20 +6,20 @@ interface IProps {
   id: number
 }
 
-export const vNode = ({id}: IProps) => {
-  return <div id={id}>Text</div>
+export const vNode = () => {
+  return <div/>
 }
 
 const vNode1 = () => {
   return (
     <span class={'89'}>
-      <vNode id={89}/>
-      <div>89</div>
+      <vNode/>
+      <div FOR={[89,89,89]}>89</div>
     </span>
   )
 }
 
-const node = vNode({id: 89})
+const node = vNode()
 
 let app = Framewurke.createApp(node as IVirtualNode)
 

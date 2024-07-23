@@ -1,6 +1,7 @@
 import VDOM_CREATE_ELEMENT from "./create-element.js";
 import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
+import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
 
 export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
@@ -25,23 +26,29 @@ export default class VDOM_UPDATE_ELEMENT{
     }
   }
 
-  private static updateAttributeProp(element: CustomElement, key: string, newValue?: string | number){
+  private static updateAttributeProp(element: Element, key: string, newValue?: string | number | unknown[]){
     if(newValue === null || newValue === undefined){
       delete element[key]
       return
     }
+    if (key === 'FOR' && newValue instanceof Array){
+      FOR_ATTRIBUTE(element, newValue)
+
+      return;
+    }
+
     element[key] = newValue
   }
 
-  static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps) => {
+  static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps | unknown[]) => {
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
 
-    for (const key of propsKeys){
+     for (const key of propsKeys){
       const prevValue = props[key]
       const newValue = newProps[key]
 
-      if(prevValue !== newValue){
-        if(key === 'class'){
+      if(prevValue !== newValue) {
+        if (key === 'class') {
           VDOM_UPDATE_ELEMENT.updateProp(node, 'className', newValue)
         } else {
           VDOM_UPDATE_ELEMENT.updateProp(node, key, newValue)
@@ -74,8 +81,6 @@ export default class VDOM_UPDATE_ELEMENT{
 
     this.updateProps(container as Element, vElement.props, newElement.props)
     this.updateNestedElement(container, vElement.content, newElement.content)
-
-    return container
   }
 
   private static updateNestedElement(

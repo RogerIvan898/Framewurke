@@ -2,10 +2,6 @@ import {Framewurke} from "./src/Framewurke";
 import type {IVirtualNode} from "./src/virtual-dom/types";
 import VDom from "./src/virtual-dom";
 
-interface IProps {
-  id: number
-}
-
 export const vNode = () => {
   return <div/>
 }
@@ -14,7 +10,7 @@ const vNode1 = () => {
   return (
     <span class={'89'}>
       <vNode/>
-      <div FOR={[89,89,89]}>89</div>
+      <div FOR={item => [89,78,89]}></div>
     </span>
   )
 }

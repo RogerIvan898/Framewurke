@@ -9,10 +9,12 @@ export default class VDOM_UPDATE_ELEMENT{
 
     if(key.startsWith('on') && newValue instanceof Function){
       VDOM_UPDATE_ELEMENT.updateEventProp(element, key, newValue)
+
       return
     }
 
-    VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue as Exclude<VirtualNodePropsValue, Function>)
+    VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue)
+
   }
 
   private static updateEventProp(element: CustomElement, key: string, newValue?: Function){
@@ -26,15 +28,15 @@ export default class VDOM_UPDATE_ELEMENT{
     }
   }
 
-  private static updateAttributeProp(element: Element, key: string, newValue?: string | number | unknown[]){
+  private static updateAttributeProp(element: Element, key: string, newValue?: string | number | Function){
     if(newValue === null || newValue === undefined){
       delete element[key]
+
       return
     }
-    if (key === 'FOR' && newValue instanceof Array){
-      FOR_ATTRIBUTE(element, newValue)
 
-      return;
+    if(key === 'FOR' && newValue instanceof Function){
+      VDOM_CREATE_ELEMENT.processingQueue.push({element, fn: newValue})
     }
 
     element[key] = newValue
@@ -75,12 +77,15 @@ export default class VDOM_UPDATE_ELEMENT{
     if (vElement.tag !== newElement.tag) {
       const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
       (container as Element).replaceWith(nextNode)
+      VDOM_CREATE_ELEMENT.processQueue()
 
       return nextNode
     }
 
     this.updateProps(container as Element, vElement.props, newElement.props)
     this.updateNestedElement(container, vElement.content, newElement.content)
+
+    VDOM_CREATE_ELEMENT.processQueue()
   }
 
   private static updateNestedElement(

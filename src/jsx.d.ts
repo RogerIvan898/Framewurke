@@ -39,7 +39,8 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   itemID?: string
   itemRef?: string
 
-  FOR: Array<any>
+  FOR?: (item) => Array<unknown>
+  AS?: string
 }
 
 interface IHtmlElementListeners{

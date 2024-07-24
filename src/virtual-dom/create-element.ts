@@ -1,9 +1,14 @@
 import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
+import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
+type ProcessingQueue = Array<{element: Element, fn: Function}>
+
 export default class VDOM_CREATE_ELEMENT {
+  public static processingQueue: ProcessingQueue = []
+
   static createVirtualNode(text: string): IVirtualText
   static createVirtualNode(tag: string, content: CreateVirtualElementProps): IVirtualElement
   static createVirtualNode(
@@ -69,4 +74,26 @@ export default class VDOM_CREATE_ELEMENT {
 
     return element
   }
+
+ // private static queueForProcessing(element: Element, array: unknown[]){
+ //  VDOM_CREATE_ELEMENT.processingQueue.push({element, array})
+ //
+ //   if(document.readyState === 'complete'){
+ //    VDOM_CREATE_ELEMENT.processQueue()
+ //   }
+ //   else {
+ //     window.addEventListener('load', VDOM_CREATE_ELEMENT.processQueue)
+ //   }
+ // }
+
+ static processQueue(){
+    VDOM_CREATE_ELEMENT.processingQueue.forEach(({element, fn}) => {
+      console.log(element)
+      if(element.parentNode){
+        FOR_ATTRIBUTE(element, fn)
+      }
+    })
+
+   VDOM_CREATE_ELEMENT.processingQueue = []
+ }
 }

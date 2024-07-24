@@ -10,7 +10,7 @@
         "noFallthroughCasesInSwitch": true,
         "isolatedModules": false,
         "noUnusedLocals": false,
-        "noUnusedParameters": true,
+        "noUnusedParameters": false,
         "allowSyntheticDefaultImports": true,
         "outDir": "./build",
         "jsx": "preserve",

@@ -5,12 +5,12 @@ import VDom from "./src/virtual-dom";
 export const vNode = () => {
   return <div/>
 }
-
+const item = 10
 const vNode1 = () => {
   return (
     <span class={'89'}>
       <vNode/>
-      <div FOR={item => [89,78,89]}></div>
+      <div FOR={item => [89,78,89]}>{item}</div>
     </span>
   )
 }

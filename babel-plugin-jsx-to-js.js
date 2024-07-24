@@ -1,5 +1,3 @@
-// babel-plugin-jsx-to-js.js
-
 const htmlTags = new Set([
   'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote',
   'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del',
@@ -11,7 +9,7 @@ const htmlTags = new Set([
   'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ]);
 
-module.exports = function({ types: t }) {
+module.exports = function ({ types: t }) {
   return {
     visitor: {
       JSXElement(path) {
@@ -25,7 +23,10 @@ module.exports = function({ types: t }) {
               return null; // Удалить пустые строки
             }
           } else if (t.isJSXExpressionContainer(child)) {
-            return child.expression;
+            return t.templateLiteral(
+              [t.templateElement({ raw: "", cooked: "" }), t.templateElement({ raw: "", cooked: "" }, true)],
+              [child.expression]
+            );
           }
           return child;
         }).filter(Boolean);
@@ -58,7 +59,7 @@ module.exports = function({ types: t }) {
         if (isCustomComponent) {
           createElementInvoke = t.callExpression(
             t.identifier(tagName),
-            [t.objectExpression(attributes)]
+            [t.objectExpression(attributes), ...children]
           );
         } else {
           createElementInvoke = t.callExpression(

@@ -8,9 +8,10 @@ export const FOR_ATTRIBUTE = (element: Element, fn: Function) => {
     return
   }
 
-  array.forEach(_ => {
-    const newElement = element.cloneNode(true)
-    // newElement.textContent = String(item)
+  array.forEach(item => {
+    const newElement = element.cloneNode(true) as HTMLElement
+    newElement.innerHTML =
+      newElement.innerHTML.replace(`*${itemTitle}`, String(item))
     element.parentNode.appendChild(newElement)
   })
   element.parentNode.removeChild(element)

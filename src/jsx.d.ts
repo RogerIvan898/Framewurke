@@ -40,7 +40,7 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   itemRef?: string
 
   FOR?: (item) => Array<unknown>
-  AS?: string
+  IF?: boolean
 }
 
 interface IHtmlElementListeners{

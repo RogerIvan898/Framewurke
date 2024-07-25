@@ -4,10 +4,7 @@ import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
-type ProcessingQueue = Array<{element: Element, fn: Function}>
-
 export default class VDOM_CREATE_ELEMENT {
-  public static processingQueue: ProcessingQueue = []
 
   static createVirtualNode(text: string): IVirtualText
   static createVirtualNode(tag: string, content: CreateVirtualElementProps): IVirtualElement
@@ -85,15 +82,4 @@ export default class VDOM_CREATE_ELEMENT {
  //     window.addEventListener('load', VDOM_CREATE_ELEMENT.processQueue)
  //   }
  // }
-
- static processQueue(){
-    VDOM_CREATE_ELEMENT.processingQueue.forEach(({element, fn}) => {
-      console.log(element)
-      if(element.parentNode){
-        FOR_ATTRIBUTE(element, fn)
-      }
-    })
-
-   VDOM_CREATE_ELEMENT.processingQueue = []
- }
 }

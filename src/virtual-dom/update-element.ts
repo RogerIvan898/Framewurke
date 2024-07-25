@@ -1,7 +1,7 @@
 import VDOM_CREATE_ELEMENT from "./create-element.js";
 import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
-import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
+import {ProcessingQueue} from "../processing-queue";
 
 export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
@@ -35,8 +35,8 @@ export default class VDOM_UPDATE_ELEMENT{
       return
     }
 
-    if(key === 'FOR' && newValue instanceof Function){
-      VDOM_CREATE_ELEMENT.processingQueue.push({element, fn: newValue})
+    if(key === 'FOR' || key === 'IF'){
+      ProcessingQueue.addProcess(key, element, newValue)
     }
 
     element[key] = newValue
@@ -77,7 +77,7 @@ export default class VDOM_UPDATE_ELEMENT{
     if (vElement.tag !== newElement.tag) {
       const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
       (container as Element).replaceWith(nextNode)
-      VDOM_CREATE_ELEMENT.processQueue()
+      ProcessingQueue.processQueue()
 
       return nextNode
     }
@@ -85,7 +85,7 @@ export default class VDOM_UPDATE_ELEMENT{
     this.updateProps(container as Element, vElement.props, newElement.props)
     this.updateNestedElement(container, vElement.content, newElement.content)
 
-    VDOM_CREATE_ELEMENT.processQueue()
+    ProcessingQueue.processQueue()
   }
 
   private static updateNestedElement(

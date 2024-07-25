@@ -2,8 +2,6 @@ export const FOR_ATTRIBUTE = (element: Element, fn: Function) => {
   const itemTitle = getArrayFunctionArguments(fn)
   const array = fn()
 
-  console.log(element.parentNode, itemTitle)
-
   if(!element.parentElement){
     return
   }

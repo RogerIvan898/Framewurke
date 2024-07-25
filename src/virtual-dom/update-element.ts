@@ -9,12 +9,10 @@ export default class VDOM_UPDATE_ELEMENT{
 
     if(key.startsWith('on') && newValue instanceof Function){
       VDOM_UPDATE_ELEMENT.updateEventProp(element, key, newValue)
-
       return
     }
 
     VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue)
-
   }
 
   private static updateEventProp(element: CustomElement, key: string, newValue?: Function){
@@ -23,26 +21,31 @@ export default class VDOM_UPDATE_ELEMENT{
     if(newValue){
       element[eventName] = newValue
       element.addEventListener(eventName, createListener)
-    } else {
-      element.removeEventListener(eventName, createListener)
+      return
     }
+    element.removeEventListener(eventName, createListener)
   }
 
   private static updateAttributeProp(element: Element, key: string, newValue?: string | number | Function){
-    if(newValue === null || newValue === undefined){
-      delete element[key]
+    let propKey = key
 
+    if(newValue === null || newValue === undefined){
+      delete element[propKey]
       return
     }
 
-    if(key === 'FOR' || key === 'IF'){
-      ProcessingQueue.addProcess(key, element, newValue)
+    if(propKey === 'FOR' || propKey === 'IF'){
+      ProcessingQueue.addProcess(propKey, element, newValue)
     }
 
-    element[key] = newValue
+    if(propKey === 'class' && typeof newValue === 'string'){
+      propKey = 'className'
+    }
+
+    element[propKey] = newValue
   }
 
-  static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps | unknown[]) => {
+  public static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps | unknown[]) => {
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
 
      for (const key of propsKeys){
@@ -59,7 +62,7 @@ export default class VDOM_UPDATE_ELEMENT{
     }
   }
 
-  static updateVNode = (container: Node, vNode: IVirtualNode, newNode: IVirtualNode) => {
+  public static updateVNode = (container: Node, vNode: IVirtualNode, newNode: IVirtualNode) => {
     if(vNode.type === 'text' || newNode.type === 'text' || container instanceof Text){
       if(vNode !== newNode){
         const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
@@ -88,7 +91,7 @@ export default class VDOM_UPDATE_ELEMENT{
     ProcessingQueue.processQueue()
   }
 
-  private static updateNestedElement(
+  public static updateNestedElement(
     node: Node,
     vNestedElements: IVirtualNode[],
     newNestedElements: IVirtualNode[]

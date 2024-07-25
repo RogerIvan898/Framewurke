@@ -12,7 +12,7 @@ export default class VDOM_CREATE_ELEMENT {
     tag: string, props: IVirtualNodeProps, ...content: CreateVirtualElementProps
   ): IVirtualElement
 
-  static createVirtualNode (
+  public static createVirtualNode (
     arg1: string | Function,
     arg2?: IVirtualNodeProps | CreateVirtualElementProps,
     ...arg3: CreateVirtualElementProps
@@ -42,19 +42,21 @@ export default class VDOM_CREATE_ELEMENT {
 
   private static createVirtualNestedElements(nestedElements: CreateVirtualElementProps){
     return nestedElements?.map(node =>
-      typeof node === 'string' ? VDOM_CREATE_ELEMENT.createVirtualTextNode(node) : node
+      typeof node === 'string'
+        ? VDOM_CREATE_ELEMENT.createVirtualTextNode(node)
+        : node
     ) ?? []
   }
 
-  static createVirtualElement(tag: string, props: IVirtualNodeProps, content: IVirtualNode[]): IVirtualElement {
+  private static createVirtualElement(tag: string, props: IVirtualNodeProps, content: IVirtualNode[]): IVirtualElement {
     return { type: 'element', tag, props, content: content }
   }
 
-  static createVirtualTextNode(text: string): IVirtualText{
+  private static createVirtualTextNode(text: string): IVirtualText{
     return {type: 'text', content: text}
   }
 
-  static createElementFromVNode (vNode: IVirtualNode){
+  public static createElementFromVNode (vNode: IVirtualNode){
     if (vNode.type === 'text') {
       return document.createTextNode((vNode as IVirtualText).content)
     }

@@ -2,6 +2,7 @@ import VDOM_CREATE_ELEMENT from "./create-element.js";
 import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
 import {ProcessingQueue} from "../processing-queue";
+import {CUSTOMS} from "../customs";
 
 export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
@@ -34,7 +35,7 @@ export default class VDOM_UPDATE_ELEMENT{
       return
     }
 
-    if(propKey === 'FOR' || propKey === 'IF'){
+    if(CUSTOMS.find(custom => custom.title === propKey)){
       ProcessingQueue.addProcess(propKey, element, newValue)
     }
 

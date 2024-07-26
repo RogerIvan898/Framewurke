@@ -1,28 +1,39 @@
 import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
-import {TypeProcessingQueue} from "./types";
+import type {TypeProcessingQueue} from "./types";
 import {IF_ATTRIBUTE} from "../customs/IF_ATTRIBUTE.js";
 
-export class ProcessingQueue{
+export class ProcessingQueue {
   private static processingQueue: TypeProcessingQueue = []
 
   public static addProcess(type: string, element: Element, arg: unknown) {
-    ProcessingQueue.processingQueue.push({ type, element, arg })
+    ProcessingQueue.processingQueue.push({type, element, arg})
   }
 
-  public static processQueue(){
-      ProcessingQueue.processingQueue.forEach(({ type, element, arg }) => {
-        switch (type){
-          case 'FOR': ProcessingQueue.processFORType(element, arg); break
-          case 'IF': ProcessingQueue.processIFType(element, arg); break
-          default: console.error(`Unknown type ${type}`)
-        }
+  public static processQueue() {
+    if (document.readyState === 'complete') {
+      ProcessingQueue.process()
+      return
+    }
+    window.addEventListener('load', ProcessingQueue.process, {once: true})
+  }
+
+  private static process() {
+    ProcessingQueue.processingQueue.forEach(({type, element, arg}) => {
+      switch (type) {
+        case 'FOR':
+          ProcessingQueue.processFORType(element, arg); break
+        case 'IF':
+          ProcessingQueue.processIFType(element, arg); break
+        default:
+          console.error(`Unknown type ${type}`); break
+      }
     })
 
     ProcessingQueue.processingQueue = []
   }
 
-  private static processFORType(element: Element, arg: unknown){
-    if(arg instanceof Function) {
+  private static processFORType(element: Element, arg: unknown) {
+    if (arg instanceof Function) {
       if (element.parentNode) {
         FOR_ATTRIBUTE(element, arg as Function)
       }
@@ -31,9 +42,11 @@ export class ProcessingQueue{
     }
   }
 
-  private static processIFType(element: Element, arg: unknown){
-    if(typeof arg === 'boolean'){
+  private static processIFType(element: Element, arg: unknown) {
+    if (typeof arg === 'boolean') {
       IF_ATTRIBUTE(element, arg)
+    } else {
+      console.error('IF argument is not a boolean')
     }
   }
 }

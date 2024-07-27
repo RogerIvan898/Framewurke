@@ -33,6 +33,8 @@ interface IHtmlElementAttributes extends IHtmlElementListeners{
   typeof?: string
   vocab?: string
 
+  style?: string
+
   itemProp?: string
   itemScope?: string
   itemType?: string

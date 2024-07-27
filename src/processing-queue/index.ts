@@ -10,22 +10,19 @@ export class ProcessingQueue {
   }
 
   public static processQueue() {
-    if (document.readyState === 'complete') {
+    // if (document.readyState === 'complete') {
       ProcessingQueue.process()
-      return
-    }
-    window.addEventListener('load', ProcessingQueue.process, {once: true})
-  }
+  //     return
+  //   }
+  //   window.addEventListener('load', ProcessingQueue.process, {once: true})
+   }
 
   private static process() {
     ProcessingQueue.processingQueue.forEach(({type, element, arg}) => {
       switch (type) {
-        case 'FOR':
-          ProcessingQueue.processFORType(element, arg); break
-        case 'IF':
-          ProcessingQueue.processIFType(element, arg); break
-        default:
-          console.error(`Unknown type ${type}`); break
+        case 'FOR': ProcessingQueue.processFORType(element, arg); break
+        case 'IF': ProcessingQueue.processIFType(element, arg); break
+        default: console.error(`Unknown type ${type}`); break
       }
     })
 

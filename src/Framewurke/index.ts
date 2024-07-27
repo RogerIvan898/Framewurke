@@ -6,7 +6,9 @@ export class Framewurke{
     const target = rootNode ?? document.getElementById('app')
 
     if(target) {
-      return VDom.mount(VDom.createDomElement(vRootNode), target)
+      const app = VDom.mount(VDom.createDomElement(vRootNode), target)
+      VDom.updateElement(app, vRootNode as IVirtualNode, vRootNode as IVirtualNode)
+      return app
     }
 
     return null

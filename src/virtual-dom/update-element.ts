@@ -32,6 +32,7 @@ export default class VDOM_UPDATE_ELEMENT{
 
     if(newValue === null || newValue === undefined){
       delete element[propKey]
+      element.removeAttribute(propKey)
       return
     }
 
@@ -90,6 +91,7 @@ export default class VDOM_UPDATE_ELEMENT{
     this.updateNestedElement(container, vElement.content, newElement.content)
 
     ProcessingQueue.processQueue()
+    return container
   }
 
   public static updateNestedElement(
@@ -97,7 +99,9 @@ export default class VDOM_UPDATE_ELEMENT{
     vNestedElements: IVirtualNode[],
     newNestedElements: IVirtualNode[]
   ){
-    node.childNodes.forEach((element, index) => {
+    const nestedNodes = Array.from(node.childNodes)
+
+    nestedNodes.forEach((element, index) => {
       if (index < newNestedElements.length) {
         this.updateVNode(element, vNestedElements[index], newNestedElements[index])
       } else {

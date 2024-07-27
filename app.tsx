@@ -8,17 +8,21 @@ export const vNode = () => {
 
 const isVisible = true
 
-const vNode1 = () => {
+const vNode1 = (array: number[]) => {
   return (
-    <span class={'89'}>
+    <div style={'border: 1px black solid'} class={'89'}>
       <vNode/>
-      <div IF={isVisible} FOR={item => [89,78,89]}>*item</div>
-    </span>
+      <div IF={isVisible} FOR={item => array}>*item</div>
+    </div>
   )
 }
 
-const node = vNode()
-let app = Framewurke.createApp(node as IVirtualNode)
-if(app) {
-  VDom.updateElement(app, node as IVirtualNode, vNode1() as IVirtualNode)
-}
+let vApp = vNode1([89, 98, 76]) as IVirtualNode
+let app = Framewurke.createApp(vApp as IVirtualNode)
+
+setInterval(() => {
+  let vNodeElement = vNode() as IVirtualNode
+  app = VDom.updateElement(app, vApp, vNodeElement)
+  vApp = vNodeElement
+}, 1000)
+

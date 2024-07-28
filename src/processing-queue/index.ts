@@ -6,7 +6,7 @@ export class ProcessingQueue {
   private static processingQueue: TypeProcessingQueue = []
 
   public static addProcess(type: string, element: Element, arg: unknown) {
-    ProcessingQueue.processingQueue.push({type, element, arg})
+    ProcessingQueue.processingQueue.push({ type, element, arg })
   }
 
   public static processQueue() {

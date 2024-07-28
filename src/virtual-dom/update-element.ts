@@ -5,8 +5,8 @@ import {ProcessingQueue} from "../processing-queue";
 import {CUSTOMS} from "../customs";
 
 export default class VDOM_UPDATE_ELEMENT{
-  private static updateProp = (node: Node, key: string, newValue?: VirtualNodePropsValue) => {
-    const element = node as CustomElement
+  private static updateProp = (node: Element, key: string, newValue?: VirtualNodePropsValue) => {
+    const element = node
 
     if(key.startsWith('on') && newValue instanceof Function){
       VDOM_UPDATE_ELEMENT.updateEventProp(element, key, newValue)
@@ -16,7 +16,7 @@ export default class VDOM_UPDATE_ELEMENT{
     VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue)
   }
 
-  private static updateEventProp(element: CustomElement, key: string, newValue?: Function){
+  private static updateEventProp(element: Element, key: string, newValue?: Function){
     const eventName = key.slice(2).toLowerCase()
 
     if(newValue){
@@ -27,7 +27,7 @@ export default class VDOM_UPDATE_ELEMENT{
     element.removeEventListener(eventName, createListener)
   }
 
-  private static updateAttributeProp(element: Element, key: string, newValue?: string | number | Function){
+  private static updateAttributeProp(element: Element, key: string, newValue?: VirtualNodePropsValue){
     let propKey = key
 
     if(newValue === null || newValue === undefined){
@@ -68,7 +68,7 @@ export default class VDOM_UPDATE_ELEMENT{
     if(vNode.type === 'text' || newNode.type === 'text' || container instanceof Text){
       if(vNode !== newNode){
         const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
-        (container as Element).replaceWith(nextNode)
+        (container as Text).replaceWith(nextNode)
 
         return nextNode
       }
@@ -76,26 +76,28 @@ export default class VDOM_UPDATE_ELEMENT{
       return container
     }
 
-    const vElement = vNode as IVirtualElement
-    const newElement = newNode as IVirtualElement
+    if(container instanceof Element) {
+      const vElement = vNode as IVirtualElement
+      const newElement = newNode as IVirtualElement
 
-    if (vElement.tag !== newElement.tag) {
-      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
-      (container as Element).replaceWith(nextNode)
+      if (vElement.tag !== newElement.tag) {
+        const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+        container.replaceWith(nextNode)
+        ProcessingQueue.processQueue()
+
+        return nextNode
+      }
+
+      this.updateProps(container, vElement.props, newElement.props)
+      this.updateNestedElement(container, vElement.content, newElement.content)
+
       ProcessingQueue.processQueue()
-
-      return nextNode
+      return container
     }
-
-    this.updateProps(container as Element, vElement.props, newElement.props)
-    this.updateNestedElement(container, vElement.content, newElement.content)
-
-    ProcessingQueue.processQueue()
-    return container
   }
 
   public static updateNestedElement(
-    node: Node,
+    node: Element,
     vNestedElements: IVirtualNode[],
     newNestedElements: IVirtualNode[]
   ){

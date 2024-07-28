@@ -5,7 +5,6 @@ import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
 export default class VDOM_CREATE_ELEMENT {
-
   static createVirtualNode(text: string): IVirtualText
   static createVirtualNode(tag: string, content: CreateVirtualElementProps): IVirtualElement
   static createVirtualNode(

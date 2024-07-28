@@ -7,7 +7,7 @@ export class Framewurke{
 
     if(target) {
       const app = VDom.mount(VDom.createDomElement(vRootNode), target)
-      VDom.updateElement(app, vRootNode as IVirtualNode, vRootNode as IVirtualNode)
+      VDom.updateElement(app, vRootNode, vRootNode)
       return app
     }
 

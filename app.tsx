@@ -12,7 +12,7 @@ const vNode1 = (array: number[]) => {
   return (
     <div style={'border: 1px black solid'} class={'89'}>
       <vNode/>
-      <div IF={isVisible} FOR={item => array}>*item</div>
+      <div IF={isVisible} FOR={ item => array }>*item</div>
     </div>
   )
 }
@@ -25,4 +25,3 @@ setInterval(() => {
   app = VDom.updateElement(app, vApp, vNodeElement)
   vApp = vNodeElement
 }, 1000)
-

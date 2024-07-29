@@ -1,6 +1,6 @@
 import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
-import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
+import {isNullOrUndefined} from "../helpers";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 
@@ -17,10 +17,9 @@ export default class VDOM_CREATE_ELEMENT {
     ...arg3: CreateVirtualElementProps
   ) {
     if(arg1 instanceof Function){
-      return arg1()
+      return VDOM_CREATE_ELEMENT.createVirtualNodeFromCustomElement(arg1)
     }
-
-    if(arg2 === undefined && arg3 === undefined){
+    if(isNullOrUndefined(arg2) && isNullOrUndefined(arg3)){
       return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
     }
 
@@ -29,7 +28,7 @@ export default class VDOM_CREATE_ELEMENT {
     }
 
     if(Array.isArray(arg2) && arg3 === undefined) {
-      const nestedElements = 2 ? VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg2) : []
+      const nestedElements = VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg2)
 
       return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, {}, nestedElements)
     }
@@ -47,6 +46,10 @@ export default class VDOM_CREATE_ELEMENT {
     ) ?? []
   }
 
+  private static createVirtualNodeFromCustomElement(element: Function){
+    return element()
+  }
+
   private static createVirtualElement(tag: string, props: IVirtualNodeProps, content: IVirtualNode[]): IVirtualElement {
     return { type: 'element', tag, props, content: content }
   }
@@ -60,27 +63,16 @@ export default class VDOM_CREATE_ELEMENT {
       return document.createTextNode((vNode as IVirtualText).content)
     }
 
-    const { tag, props = {} as IVirtualNodeProps, content = [] } = <IVirtualElement>vNode
+    const { tag, props = {}, content = [] } = vNode as IVirtualElement
 
     const element = document.createElement(tag)
 
     VDOM_UPDATE_ELEMENT.updateProps(element, {}, props)
 
-    for (const nestedElement of content) {
+    content.forEach(nestedElement =>
       element.appendChild(VDOM_CREATE_ELEMENT.createElementFromVNode(nestedElement))
-    }
+    )
 
     return element
   }
-
- // private static queueForProcessing(element: Element, array: unknown[]){
- //  VDOM_CREATE_ELEMENT.processingQueue.push({element, array})
- //
- //   if(document.readyState === 'complete'){
- //    VDOM_CREATE_ELEMENT.processQueue()
- //   }
- //   else {
- //     window.addEventListener('load', VDOM_CREATE_ELEMENT.processQueue)
- //   }
- // }
 }

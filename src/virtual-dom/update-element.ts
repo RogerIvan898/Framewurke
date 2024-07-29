@@ -1,19 +1,17 @@
 import VDOM_CREATE_ELEMENT from "./create-element.js";
-import type {CustomElement, IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
+import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
 import {ProcessingQueue} from "../processing-queue";
 import {CUSTOMS} from "../customs";
 
 export default class VDOM_UPDATE_ELEMENT{
-  private static updateProp = (node: Element, key: string, newValue?: VirtualNodePropsValue) => {
-    const element = node
-
+  private static updateProp = (element: Element, key: string, newValue?: VirtualNodePropsValue) => {
     if(key.startsWith('on') && newValue instanceof Function){
-      VDOM_UPDATE_ELEMENT.updateEventProp(element, key, newValue)
+      this.updateEventProp(element, key, newValue)
       return
     }
 
-    VDOM_UPDATE_ELEMENT.updateAttributeProp(element, key, newValue)
+    this.updateAttributeProp(element, key, newValue)
   }
 
   private static updateEventProp(element: Element, key: string, newValue?: Function){
@@ -33,10 +31,11 @@ export default class VDOM_UPDATE_ELEMENT{
     if(newValue === null || newValue === undefined){
       delete element[propKey]
       element.removeAttribute(propKey)
+
       return
     }
 
-    if(CUSTOMS.find(custom => custom.title === propKey)){
+    if(CUSTOMS.some(custom => custom.title === propKey)){
       ProcessingQueue.addProcess(propKey, element, newValue)
     }
 
@@ -65,35 +64,45 @@ export default class VDOM_UPDATE_ELEMENT{
   }
 
   public static updateVNode = (container: Node, vNode: IVirtualNode, newNode: IVirtualNode) => {
-    if(vNode.type === 'text' || newNode.type === 'text' || container instanceof Text){
-      if(vNode !== newNode){
-        const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
-        (container as Text).replaceWith(nextNode)
-
-        return nextNode
-      }
-
-      return container
+    if(
+      (vNode.type === 'text' || newNode.type === 'text') &&
+      (container instanceof Element || container instanceof Text)){
+      return VDOM_UPDATE_ELEMENT.updateTextNode(container, vNode, newNode)
     }
 
     if(container instanceof Element) {
-      const vElement = vNode as IVirtualElement
-      const newElement = newNode as IVirtualElement
-
-      if (vElement.tag !== newElement.tag) {
-        const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
-        container.replaceWith(nextNode)
-        ProcessingQueue.processQueue()
-
-        return nextNode
-      }
-
-      this.updateProps(container, vElement.props, newElement.props)
-      this.updateNestedElement(container, vElement.content, newElement.content)
-
-      ProcessingQueue.processQueue()
-      return container
+      this.updateElementNode(container, vNode, newNode)
     }
+  }
+
+  private static updateTextNode(node: Element | Text, vNode: IVirtualNode, newNode: IVirtualNode){
+    if(vNode !== newNode){
+      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+      node.replaceWith(nextNode)
+
+      return nextNode
+    }
+
+    return node
+  }
+
+  private static updateElementNode(element: Element, vNode: IVirtualNode, newNode: IVirtualNode) {
+    const vElement = vNode as IVirtualElement
+    const newElement = newNode as IVirtualElement
+
+    if (vElement.tag !== newElement.tag) {
+      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+      element.replaceWith(nextNode)
+      ProcessingQueue.processQueue()
+
+      return nextNode
+    }
+
+    this.updateProps(element, vElement.props, newElement.props)
+    this.updateNestedElement(element, vElement.content, newElement.content)
+
+    ProcessingQueue.processQueue()
+    return element
   }
 
   public static updateNestedElement(

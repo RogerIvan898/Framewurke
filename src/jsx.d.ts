@@ -1,9 +1,12 @@
+import {IVirtualNode} from "./virtual-dom/types";
+
 declare namespace JSX{
   interface IntrinsicElements{
     div: Partial<IHtmlElementAttributes>,
     span: Partial<IHtmlElementAttributes>
     [elementName: string]: any
   }
+  type Element = IVirtualNode
 }
 
 interface IHtmlElementAttributes extends IHtmlElementListeners{

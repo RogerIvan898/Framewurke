@@ -4,8 +4,6 @@ export interface IVirtualNodeProps {
   [key: string]: VirtualNodePropsValue
 }
 
-export type CustomElement = Element & IVirtualNodeProps
-
 export interface IVirtualNode {
   type: 'element' | 'text'
 }

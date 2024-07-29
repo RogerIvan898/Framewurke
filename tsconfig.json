@@ -15,6 +15,7 @@
         "outDir": "./build",
         "jsx": "preserve",
         "moduleResolution": "node",
+        "experimentalDecorators": true
     },
     "exclude": ["node_modules"]
 }

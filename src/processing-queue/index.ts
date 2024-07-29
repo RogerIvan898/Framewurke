@@ -9,15 +9,15 @@ export class ProcessingQueue {
     ProcessingQueue.processingQueue.push({ type, element, arg })
   }
 
-  public static processQueue() {
-    // if (document.readyState === 'complete') {
-      ProcessingQueue.process()
-  //     return
-  //   }
-  //   window.addEventListener('load', ProcessingQueue.process, {once: true})
+   public static processQueueAfterPageLoad(){
+    if (document.readyState === 'complete') {
+      ProcessingQueue.processQueue()
+      return
+    }
+    window.addEventListener('load', ProcessingQueue.processQueue, { once: true })
    }
 
-  private static process() {
+  public static processQueue() {
     ProcessingQueue.processingQueue.forEach(({type, element, arg}) => {
       switch (type) {
         case 'FOR': ProcessingQueue.processFORType(element, arg); break

@@ -1,5 +1,7 @@
 import VDOM_CREATE_ELEMENT from "./create-element.js";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
+import {IVirtualElement, IVirtualNode} from "./types";
+import {JSX} from "../jsx";
 
 export default class VDom{
   public static mount(node: Node, target: HTMLElement) {
@@ -18,4 +20,8 @@ export default class VDom{
 
   public static createDomElement = VDOM_CREATE_ELEMENT.createElementFromVNode
   public static createElement = VDOM_CREATE_ELEMENT.createVirtualNode
+
+  public static renderVirtualNode(element: JSX.Element){
+    return element as IVirtualNode
+  }
 }

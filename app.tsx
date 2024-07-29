@@ -1,14 +1,14 @@
 import {Framewurke} from "./src/Framewurke";
-import type {IVirtualNode} from "./src/virtual-dom/types";
 import VDom from "./src/virtual-dom";
+import {IVirtualNode} from "./src/virtual-dom/types";
 
 export const vNode = () => {
   return <div/>
 }
 
-const isVisible = true
+const vNode1 = (array: unknown[]) =>{
+  const isVisible = true
 
-const vNode1 = (array: number[]) => {
   return (
     <div style={'border: 1px black solid'} class={'89'}>
       <vNode/>
@@ -17,8 +17,8 @@ const vNode1 = (array: number[]) => {
   )
 }
 
-let vApp = vNode1([89, 98, 76]) as IVirtualNode
-let app = Framewurke.createApp(vApp as IVirtualNode)
+let vApp = vNode1([89, 89, 78]) as IVirtualNode
+let app = Framewurke.createApp(vApp)
 
 setInterval(() => {
   const vNodeElement = vNode() as IVirtualNode

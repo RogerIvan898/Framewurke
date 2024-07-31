@@ -14,22 +14,24 @@ module.exports = function ({ types: t }) {
     visitor: {
       JSXElement(path) {
         const openingElement = path.node.openingElement;
-        const children = path.node.children.map(child => {
+        const children = [];
+
+        path.node.children.forEach(child => {
           if (t.isJSXText(child)) {
             const trimmedValue = child.value.trim();
             if (trimmedValue) {
-              return t.stringLiteral(trimmedValue);
-            } else {
-              return null; // Удалить пустые строки
+              children.push(t.stringLiteral(trimmedValue));
             }
           } else if (t.isJSXExpressionContainer(child)) {
-            return t.templateLiteral(
-              [t.templateElement({ raw: "", cooked: "" }), t.templateElement({ raw: "", cooked: "" }, true)],
-              [child.expression]
-            );
+            if (t.isArrayExpression(child.expression)) {
+              children.push(...child.expression.elements);
+            } else {
+              children.push(child.expression);
+            }
+          } else {
+            children.push(child);
           }
-          return child;
-        }).filter(Boolean);
+        });
 
         const tagNameNode = openingElement.name;
         let tagName = null;
@@ -37,7 +39,7 @@ module.exports = function ({ types: t }) {
 
         if (t.isJSXIdentifier(tagNameNode)) {
           tagName = tagNameNode.name;
-          isCustomComponent = !htmlTags.has(tagName); // Проверка на стандартные HTML теги
+          isCustomComponent = !htmlTags.has(tagName);
         } else if (t.isJSXMemberExpression(tagNameNode)) {
           tagName = `${tagNameNode.object.name}.${tagNameNode.property.name}`;
           isCustomComponent = true;
@@ -57,17 +59,27 @@ module.exports = function ({ types: t }) {
 
         let createElementInvoke = null;
         if (isCustomComponent) {
+          const props = t.objectExpression(attributes);
           createElementInvoke = t.callExpression(
             t.identifier(tagName),
-            [t.objectExpression(attributes), ...children]
+            [props, ...children]
           );
         } else {
+          const childrenArgs = [];
+          children.forEach(child => {
+            if (t.isCallExpression(child) && t.isMemberExpression(child.callee) && child.callee.object.name === 'array' && child.callee.property.name === 'map') {
+              childrenArgs.push(t.spreadElement(child));
+            } else {
+              childrenArgs.push(child);
+            }
+          });
+
           createElementInvoke = t.callExpression(
             t.memberExpression(t.identifier("VDOM"), t.identifier("createElement")),
             [
               t.stringLiteral(tagName),
               t.objectExpression(attributes),
-              ...children
+              ...childrenArgs
             ]
           );
         }

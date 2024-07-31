@@ -47,6 +47,7 @@ export default class VDOM_UPDATE_ELEMENT{
   }
 
   public static updateProps = (node: Element, props: IVirtualNodeProps, newProps: IVirtualNodeProps | unknown[]) => {
+    console.log(node, props, newProps)
     const propsKeys = new Set([...Object.keys(props), ...Object.keys(newProps)])
 
      for (const key of propsKeys){
@@ -70,14 +71,12 @@ export default class VDOM_UPDATE_ELEMENT{
       return VDOM_UPDATE_ELEMENT.updateTextNode(container, vNode, newNode)
     }
 
-    if(container instanceof Element) {
-      this.updateElementNode(container, vNode, newNode)
-    }
+    return this.updateElementNode(container as Element, vNode, newNode)
   }
 
   private static updateTextNode(node: Element | Text, vNode: IVirtualNode, newNode: IVirtualNode){
     if(vNode !== newNode){
-      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
       node.replaceWith(nextNode)
 
       return nextNode
@@ -91,15 +90,17 @@ export default class VDOM_UPDATE_ELEMENT{
     const newElement = newNode as IVirtualElement
 
     if (vElement.tag !== newElement.tag) {
-      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode);
+      const nextNode = VDOM_CREATE_ELEMENT.createElementFromVNode(newNode)
       element.replaceWith(nextNode)
       ProcessingQueue.processQueue()
 
       return nextNode
     }
 
-    this.updateProps(element, vElement.props, newElement.props)
-    this.updateNestedElement(element, vElement.content, newElement.content)
+    if(element instanceof Element) {
+      this.updateProps(element, vElement.props, newElement.props)
+      this.updateNestedElement(element, vElement.content, newElement.content)
+    }
 
     ProcessingQueue.processQueue()
     return element
@@ -110,7 +111,7 @@ export default class VDOM_UPDATE_ELEMENT{
     vNestedElements: IVirtualNode[],
     newNestedElements: IVirtualNode[]
   ){
-    const nestedNodes = Array.from(node.childNodes)
+    const nestedNodes = Array.from(node.childNodes) as (Element | Text)[]
 
     nestedNodes.forEach((element, index) => {
       if (index < newNestedElements.length) {

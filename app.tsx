@@ -12,7 +12,8 @@ const vNode1 = (array: unknown[]) =>{
   return (
     <div style={'border: 1px black solid'} class={'89'}>
       <vNode/>
-      <div IF={isVisible} FOR={item => array}>*item</div>
+      { [<div>item</div>, <div>87</div>, <div>67</div>] }
+      <div IF={isVisible}>*item</div>
     </div>
   )
 }
@@ -22,6 +23,7 @@ let app = Framewurke.createApp(vApp)
 
 setInterval(() => {
   const vNodeElement = vNode() as IVirtualNode
+
   app = VDom.updateElement(app, vApp, vNodeElement)
   vApp = vNodeElement
 }, 1000)

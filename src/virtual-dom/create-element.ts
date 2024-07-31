@@ -29,7 +29,6 @@ export default class VDOM_CREATE_ELEMENT {
 
     if(Array.isArray(arg2) && arg3 === undefined) {
       const nestedElements = VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg2)
-
       return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, {}, nestedElements)
     }
 

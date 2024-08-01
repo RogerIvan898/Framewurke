@@ -1,3 +1,5 @@
+// babel-plugin-jsx-to-js.js
+
 const htmlTags = new Set([
   'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote',
   'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del',
@@ -9,7 +11,7 @@ const htmlTags = new Set([
   'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr'
 ]);
 
-module.exports = function ({ types: t }) {
+module.exports = function({ types: t }) {
   return {
     visitor: {
       JSXElement(path) {
@@ -25,6 +27,8 @@ module.exports = function ({ types: t }) {
           } else if (t.isJSXExpressionContainer(child)) {
             if (t.isArrayExpression(child.expression)) {
               children.push(...child.expression.elements);
+            } else if (t.isCallExpression(child.expression) && t.isMemberExpression(child.expression.callee) && child.expression.callee.property.name === 'map') {
+              children.push(t.spreadElement(child.expression));
             } else {
               children.push(child.expression);
             }
@@ -65,21 +69,12 @@ module.exports = function ({ types: t }) {
             [props, ...children]
           );
         } else {
-          const childrenArgs = [];
-          children.forEach(child => {
-            if (t.isCallExpression(child) && t.isMemberExpression(child.callee) && child.callee.object.name === 'array' && child.callee.property.name === 'map') {
-              childrenArgs.push(t.spreadElement(child));
-            } else {
-              childrenArgs.push(child);
-            }
-          });
-
           createElementInvoke = t.callExpression(
             t.memberExpression(t.identifier("VDOM"), t.identifier("createElement")),
             [
               t.stringLiteral(tagName),
               t.objectExpression(attributes),
-              ...childrenArgs
+              ...children
             ]
           );
         }

@@ -8,11 +8,12 @@ export const vNode = () => {
 
 const vNode1 = (array: unknown[]) =>{
   const isVisible = true
+  const arr = ['item', 87, 67]
 
   return (
     <div style={'border: 1px black solid'} class={'89'}>
       <vNode/>
-      { [<div>item</div>, <div>87</div>, <div>67</div>] }
+      { arr.map(item => <div>{item}</div>) }
       <div IF={isVisible}>*item</div>
     </div>
   )

@@ -103,6 +103,7 @@ export default class VDOM_UPDATE_ELEMENT{
     }
 
     ProcessingQueue.processQueue()
+
     return element
   }
 

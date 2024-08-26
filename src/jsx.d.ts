@@ -1,4 +1,4 @@
-import {IVirtualNode} from "./virtual-dom/types";
+import {IVirtualNode} from "./modules/virtual-dom/types";
 
 declare namespace JSX{
   interface IntrinsicElements{

@@ -1,6 +1,6 @@
-import {Framewurke} from "./src/Framewurke";
-import VDom from "./src/virtual-dom";
-import {IVirtualNode} from "./src/virtual-dom/types";
+import {VirtualDom} from "./src/VirtualDom";
+import VDom from "./src/modules/virtual-dom";
+import {IVirtualNode} from "./src/modules/virtual-dom/types";
 
 export const vNode = () => {
   return <div/>
@@ -19,7 +19,7 @@ const vNode1 = (array: unknown[]) =>{
 }
 
 let vApp = vNode1(['89', '89', '78']) as IVirtualNode
-let app = Framewurke.createApp(vApp)
+let app = VirtualDom.createApp(vApp)
 
 setInterval(() => {
   const vNodeElement = vNode() as IVirtualNode

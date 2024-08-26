@@ -3,4 +3,5 @@ type QueueProcess = {
   element: Element,
   arg: unknown
 }
+
 export type TypeProcessingQueue = QueueProcess[]

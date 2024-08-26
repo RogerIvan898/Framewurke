@@ -1,6 +1,6 @@
 import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, IVirtualText} from "./types";
 import VDOM_UPDATE_ELEMENT from "./update-element.js";
-import {isNullOrUndefined} from "../helpers";
+import {isNullOrUndefined} from "../../helpers";
 
 type CreateVirtualElementProps = (IVirtualNode | string)[]
 

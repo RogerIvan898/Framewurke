@@ -1,13 +1,14 @@
-import type {IVirtualNode} from "../virtual-dom/types";
-import VDom from "../virtual-dom";
+import type {IVirtualNode} from "../modules/virtual-dom/types";
+import VDom from "../modules/virtual-dom";
 
-export class Framewurke{
+export class VirtualDom{
   public static createApp(vRootNode: IVirtualNode, rootNode?: HTMLElement){
     const target = rootNode ?? document.getElementById('app')
-
+    
     if(target) {
       const app = VDom.mount(VDom.createDomElement(vRootNode), target)
       VDom.updateElement(app, vRootNode, vRootNode)
+
       return app
     }
 

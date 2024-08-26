@@ -1,6 +1,6 @@
-import {FOR_ATTRIBUTE} from "../customs/FOR_ATTRIBUTE.js";
+import {FOR_ATTRIBUTE} from "../../customs/FOR_ATTRIBUTE.js";
 import type {TypeProcessingQueue} from "./types";
-import {IF_ATTRIBUTE} from "../customs/IF_ATTRIBUTE.js";
+import {IF_ATTRIBUTE} from "../../customs/IF_ATTRIBUTE.js";
 
 export class ProcessingQueue {
   private static processingQueue: TypeProcessingQueue = []

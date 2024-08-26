@@ -2,7 +2,7 @@ import VDOM_CREATE_ELEMENT from "./create-element.js";
 import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsValue} from "./types";
 import {createListener} from "./event-listeners.js";
 import {ProcessingQueue} from "../processing-queue";
-import {CUSTOMS} from "../customs";
+import {CUSTOMS} from "../../customs";
 
 export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (element: Element, key: string, newValue?: VirtualNodePropsValue) => {

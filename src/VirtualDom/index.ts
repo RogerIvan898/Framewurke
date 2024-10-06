@@ -4,14 +4,17 @@ import VDom from "../modules/virtual-dom";
 export class VirtualDom{
   public static createApp(vRootNode: IVirtualNode, rootNode?: HTMLElement){
     const target = rootNode ?? document.getElementById('app')
-    
-    if(target) {
-      const app = VDom.mount(VDom.createDomElement(vRootNode), target)
-      VDom.updateElement(app, vRootNode, vRootNode)
 
-      return app
+    if (!target) {
+      console.error('Target container not found. Please ensure an element with ID "app" exists.')
+      return null
     }
 
-    return null
+    const appElement = VDom.createDomElement(vRootNode)
+    const appInstance = VDom.mount(appElement, target)
+
+    VDom.updateElement(appInstance, vRootNode, vRootNode)
+
+    return appInstance
   }
 }

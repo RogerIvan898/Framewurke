@@ -3,7 +3,7 @@ import VDom from "./src/modules/virtual-dom";
 import {IVirtualNode} from "./src/modules/virtual-dom/types";
 
 export const vNode = () => {
-  return <div/>
+  return <div>80</div>
 }
 
 const vNode1 = (array: unknown[]) =>{
@@ -20,9 +20,9 @@ const vNode1 = (array: unknown[]) =>{
 
 let vApp = vNode1(['89', '89', '78']) as IVirtualNode
 let app = VirtualDom.createApp(vApp)
-//
-// setInterval(() => {
-//   const vNodeElement = vNode() as IVirtualNode
-//   app = VDom.updateElement(app, vApp, vNodeElement)
-//   vApp = vNodeElement
-// }, 1000)
+
+setInterval(() => {
+  const vNodeElement = vNode() as IVirtualNode
+  app = VDom.updateElement(app, vApp, vNodeElement)
+  vApp = vNodeElement
+}, 1000)

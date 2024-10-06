@@ -7,7 +7,8 @@ export function createListener(this: IEventHandler, event: Event) {
 
   if(typeof handler !== 'function'){
     console.error(`No event handler found: ${event.type}`)
+    return
   }
 
-  return this[event.type](event)
+  return handler(event)
 }

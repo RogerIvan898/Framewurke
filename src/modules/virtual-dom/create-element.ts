@@ -16,19 +16,19 @@ export default class VDOM_CREATE_ELEMENT {
     arg2?: IVirtualNodeProps | CreateVirtualElementProps,
     ...arg3: CreateVirtualElementProps
   ) {
-    if(arg1 instanceof Function){
+    if(typeof arg1 === 'function'){
       return VDOM_CREATE_ELEMENT.createVirtualNodeFromCustomElement(arg1)
     }
+
     if(isNullOrUndefined(arg2) && isNullOrUndefined(arg3)){
       return VDOM_CREATE_ELEMENT.createVirtualTextNode(arg1)
     }
 
-    if(arg2 === null){
-      arg2 = {}
-    }
+    arg2 = arg2 ?? {}
 
-    if(Array.isArray(arg2) && arg3 === undefined) {
+    if(Array.isArray(arg2) && !arg3.length) {
       const nestedElements = VDOM_CREATE_ELEMENT.createVirtualNestedElements(arg2)
+
       return VDOM_CREATE_ELEMENT.createVirtualElement(arg1, {}, nestedElements)
     }
 

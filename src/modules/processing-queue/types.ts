@@ -5,3 +5,5 @@ type QueueProcess = {
 }
 
 export type TypeProcessingQueue = QueueProcess[]
+
+export type QueueProcessHandler = (element: Element, arg: unknown) => void

@@ -17,7 +17,7 @@ module.exports = function (api) {
       declarations: [
         {
           default: 'VDOM',
-          path: './src/virtual-dom'
+          path: './src/modules/virtual-dom'
         },
       ],
     }],

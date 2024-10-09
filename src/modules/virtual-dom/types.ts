@@ -1,10 +1,12 @@
+import {JSX} from "../../jsx";
+
 export type VirtualNodePropsValue = string | Function | number
 
 export interface IVirtualNodeProps {
   [key: string]: VirtualNodePropsValue
 }
 
-export interface IVirtualNode {
+export interface IVirtualNode extends JSX.Element{
   type: 'element' | 'text'
 }
 

@@ -3,10 +3,11 @@ import type {IVirtualElement, IVirtualNode, IVirtualNodeProps, VirtualNodePropsV
 import {createListener} from "./event-listeners.js";
 import {ProcessingQueue} from "../processing-queue";
 import {CUSTOMS} from "../../customs";
+import {isNullOrUndefined, isVirtualTextNode} from "../../helpers";
 
 export default class VDOM_UPDATE_ELEMENT{
   private static updateProp = (element: Element, key: string, newValue?: VirtualNodePropsValue) => {
-    if(key.startsWith('on') && newValue instanceof Function){
+    if(key.startsWith('on') && typeof newValue === 'function'){
       this.updateEventProp(element, key, newValue)
       return
     }
@@ -20,15 +21,15 @@ export default class VDOM_UPDATE_ELEMENT{
     if(newValue){
       element[eventName] = newValue
       element.addEventListener(eventName, createListener)
-      return
+    } else {
+      element.removeEventListener(eventName, createListener)
     }
-    element.removeEventListener(eventName, createListener)
   }
 
   private static updateAttributeProp(element: Element, key: string, newValue?: VirtualNodePropsValue){
     let propKey = key
 
-    if(newValue === null || newValue === undefined){
+    if(isNullOrUndefined(newValue)){
       delete element[propKey]
       element.removeAttribute(propKey)
 
@@ -65,10 +66,10 @@ export default class VDOM_UPDATE_ELEMENT{
   }
 
   public static updateVNode = (container: Node, vNode: IVirtualNode, newNode: IVirtualNode) => {
-    if(
-      (vNode.type === 'text' || newNode.type === 'text') &&
-      (container instanceof Element || container instanceof Text)){
-      return VDOM_UPDATE_ELEMENT.updateTextNode(container, vNode, newNode)
+    if(isVirtualTextNode(vNode)|| isVirtualTextNode(newNode)){
+      if(container instanceof Text){
+        return this.updateTextNode(container, vNode, newNode)
+      }
     }
 
     return this.updateElementNode(container as Element, vNode, newNode)
